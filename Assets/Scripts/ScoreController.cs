@@ -8,8 +8,11 @@ public class ScoreController : MonoBehaviour
     //Scoreに加算されるルールを扱う構造体
     private struct AddScoreRule
     {
+        //Scoreに加算するための条件のタグ
         public string tag;
+        //加算するScore値
         public int score;
+        //条件タグと加算Score値を初期化設定するコンストラクタ
         public AddScoreRule(string tag, int score)
         {
             this.tag = tag;
@@ -97,12 +100,12 @@ public class ScoreController : MonoBehaviour
             break;
             
         }
+        UpdateScoreText();
     }
 
     //当たり判定処理
     private void OnCollisionEnter(Collision target)
     {
         HitScore(target.gameObject.tag);
-        UpdateScoreText();
     }
 }
