@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class FripperController : MonoBehaviour
@@ -17,7 +19,6 @@ public class FripperController : MonoBehaviour
         }
         //フリッパーを操作するKeyCodeリスト
         private List<KeyCode> keyCodes;
-
         //コンストラクタ
         public InputKeyFripper(string tag, KeyCode[] keyCodes)
         {
@@ -25,16 +26,16 @@ public class FripperController : MonoBehaviour
             this.keyCodes = new List<KeyCode>(keyCodes);
             for (int i = 0; i < keyCodes.Length; i++) this.keyCodes.Add(keyCodes[i]);
         }
-        //フリッパーのキー入力されている判定
-        public bool IsKeyFripperOn()
+        //フリッパーのキー入力判定
+        public bool IsKeyFripper(Func<KeyCode, bool> func)
         {
-            for(int i = 0; i < this.keyCodes.Count; i++) if (Input.GetKeyDown(this.keyCodes[i])) return true;
-            return false;
-        }
-        //フリッパーのキーが入力されていない判定
-        public bool IsKeyFripperOff()
-        {
-            for (int i = 0; i < this.keyCodes.Count; i++) if (Input.GetKeyUp(this.keyCodes[i])) return true;
+            for(int i = 0; i < this.keyCodes.Count; i++)
+            {
+                if (func(this.keyCodes[i]))
+                {
+                    return true;
+                }
+            }
             return false;
         }
     }
@@ -53,6 +54,8 @@ public class FripperController : MonoBehaviour
     private KeyCode[] leftKeys = { KeyCode.LeftArrow, KeyCode.A, KeyCode.S};
     private KeyCode[] rightKeys = { KeyCode.RightArrow, KeyCode.D, KeyCode.S};
 
+    delegate bool InputFripperKeyDown(KeyCode key);
+
     // Start is called before the first frame update
     void Start()
     {
@@ -69,12 +72,12 @@ public class FripperController : MonoBehaviour
     void Update()
     {
         //左右のフリッパーを動かす判定処理
-        SetFripper(leftKeyFripper.IsKeyFripperOn(), leftKeyFripper.Tag, this.flickAngle);
-        SetFripper(rightKeyFripper.IsKeyFripperOn(), rightKeyFripper.Tag, this.flickAngle);
+        SetFripper(leftKeyFripper.IsKeyFripper(Input.GetKeyDown), leftKeyFripper.Tag, this.flickAngle);
+        SetFripper(rightKeyFripper.IsKeyFripper(Input.GetKeyDown), rightKeyFripper.Tag, this.flickAngle);
 
         //左右のフリッパーを元に戻す判定処理
-        SetFripper(leftKeyFripper.IsKeyFripperOff(), leftKeyFripper.Tag, this.defaultAngle);
-        SetFripper(rightKeyFripper.IsKeyFripperOff(), rightKeyFripper.Tag, this.defaultAngle);
+        SetFripper(leftKeyFripper.IsKeyFripper(Input.GetKeyUp), leftKeyFripper.Tag, this.defaultAngle);
+        SetFripper(rightKeyFripper.IsKeyFripper(Input.GetKeyUp), rightKeyFripper.Tag, this.defaultAngle);
     }
 
     //フリッパーを動かす
