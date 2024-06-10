@@ -52,8 +52,8 @@ public class FripperController : MonoBehaviour
     //フリッパーの左右のタグ列挙
     private enum FripperTag { LeftFripperTag, RightFripperTag }
     //フリッパーの左右のキーコード配列
-    private KeyCode[] leftKeys = { KeyCode.LeftArrow, KeyCode.A, KeyCode.S};
-    private KeyCode[] rightKeys = { KeyCode.RightArrow, KeyCode.D, KeyCode.S};
+    private KeyCode[] leftKeys = { KeyCode.LeftArrow, KeyCode.DownArrow, KeyCode.A, KeyCode.S};
+    private KeyCode[] rightKeys = { KeyCode.RightArrow, KeyCode.DownArrow, KeyCode.D, KeyCode.S};
 
     delegate bool InputFripperKeyDown(KeyCode key);
 
