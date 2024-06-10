@@ -29,14 +29,15 @@ public class FripperController : MonoBehaviour
         //フリッパーのキー入力判定
         public bool IsKeyFripper(Func<KeyCode, bool> func)
         {
+            bool isInputKey = false;
             for(int i = 0; i < this.keyCodes.Count; i++)
             {
                 if (func(this.keyCodes[i]))
                 {
-                    return true;
+                    isInputKey = true;
                 }
             }
-            return false;
+            return isInputKey;
         }
     }
     //HingeJointコンポーネント
@@ -76,14 +77,14 @@ public class FripperController : MonoBehaviour
         SetFripper(rightKeyFripper.IsKeyFripper(Input.GetKeyDown), rightKeyFripper.Tag, this.flickAngle);
 
         //左右のフリッパーを元に戻す判定処理
-        SetFripper(leftKeyFripper.IsKeyFripper(Input.GetKeyUp), leftKeyFripper.Tag, this.defaultAngle);
-        SetFripper(rightKeyFripper.IsKeyFripper(Input.GetKeyUp), rightKeyFripper.Tag, this.defaultAngle);
+        SetFripper(!leftKeyFripper.IsKeyFripper(Input.GetKey), leftKeyFripper.Tag, this.defaultAngle);
+        SetFripper(!rightKeyFripper.IsKeyFripper(Input.GetKey), rightKeyFripper.Tag, this.defaultAngle);
     }
 
     //フリッパーを動かす
-    private void SetFripper(bool isActive, string tag, float angle)
+    private void SetFripper(bool isActiveInputKey, string tag, float angle)
     {
-        if (!isActive || tag != this.tag) return;
+        if (!isActiveInputKey || tag != this.tag) return;
         SetAngle(angle);
     }
 
